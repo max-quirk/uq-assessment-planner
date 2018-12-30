@@ -1,1 +1,1 @@
-web: gunicorn --bind 0.0.0.0:$PORT app:app --preload --workers 1
+worker: gunicorn app:app

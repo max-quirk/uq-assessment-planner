@@ -4,10 +4,12 @@ import csv
 import scrape.helpers as helpers
 from calendar_export import calExport
 import dateparser
+import os
 app = Flask(__name__)
 app.debug = True
 
 all_course_assessment = []
+port = int(os.environ.get('PORT', 5000))
 
 def formatDate(date):
     return dateparser.parse(date)

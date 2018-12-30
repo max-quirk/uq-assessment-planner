@@ -1,0 +1,94 @@
+<!doctype HTML>
+<html lang="en">
+
+<head>
+  <link rel="stylesheet" href="static/title.css">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-107716051-2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'UA-107716051-2');
+  </script>
+  <link href='https://fonts.googleapis.com/css?family=Cormorant+Garamond:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UQ Assessment Planner</title>
+  <link rel="shortcut icon" type="image/png" href="/static/logo2.png" />
+</head>
+
+<body>
+  </br>
+  </br>
+  </br>
+  </br>
+  </br>
+  </br>
+  </br>
+  </br>
+  <h1>UQ Assessment Planner</h1>
+
+  <section id="form_div">
+    {{ error_message | safe }}
+    <form type="submit" action="/" method="POST" id="form1">
+      <section id="top">
+        <p align="left">Enter your courses below: </p>
+        </br>
+        <input class="courses" id="course-1" name="course-1" placeholder="MATH1051">
+        <!-- </br> -->
+        <div id="input2">
+          <input class="courses" id="course-2" name="course-2">
+          <!-- </br> -->
+        </div>
+        <div id="input3">
+          <input class="courses" id="course-3" name="course-3">
+          <!-- </br> -->
+        </div>
+        <div id="input4">
+          <input class="courses" id="course-4" name="course-4">
+          <!-- </br> -->
+        </div>
+        <div id="input5">
+          <input class="courses" id="course-5" name="course-5">
+          <!-- </br> -->
+        </div>
+        </br>
+        <img id="addBtn" src="static/images/add.png" alt="Add keyword">
+        </br>
+      </section>
+      </br>
+      </br>
+      </br>
+      <section id="bottom">
+
+        <a id="index_button" href="javascript:{}" onclick="document.getElementById('circularG').style.display = 'block';
+        document.getElementById('form_div').style.display = 'none'; document.getElementById('form1').submit();">Get Planner</a>
+        </br>
+        </br>
+        </br>
+        </br>
+        </br>
+        </br>
+
+      </section>
+    </form>
+  </section>
+
+  </br>
+  <div id="circularG">
+    <div id="circularG_1" class="circularG"></div>
+    <div id="circularG_2" class="circularG"></div>
+    <div id="circularG_3" class="circularG"></div>
+    <div id="circularG_4" class="circularG"></div>
+    <div id="circularG_5" class="circularG"></div>
+    <div id="circularG_6" class="circularG"></div>
+    <div id="circularG_7" class="circularG"></div>
+    <div id="circularG_8" class="circularG"></div>
+  </div>
+
+</body>
+<script src="static/correct.js"></script>
+
+</html>

@@ -1,0 +1,106 @@
+<!doctype HTML>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <script src="https://use.fontawesome.com/e63904aba2.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Cormorant+Garamond:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+    <title>Bib Bypass</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/title.css">
+    <link rel="stylesheet" href="static/bbulma-0.6.1/css/bulma.css">
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
+    <link href="https://fonts.googleapis.com/css?family=Muli%7CRoboto:400,300,500,700,900" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+</head>
+
+<body>
+
+    </br>
+    </br>
+    </br>
+    </br>
+    </br>
+    </br>
+    </br>
+    </br>
+    <h1>Bib Bypass</h1>
+
+    <div id="surely">
+        <div class="my_loader">Loading...</div>
+    </div>
+    <main class="main">
+        <form type="submit" action="/" method="POST" id="form1">
+            <section id="top">
+                <p align="left">Enter keywords related to the work you are citing: </p>
+                </br>
+                <input class="keywords" id="keyword_1" name="keyword_1">
+                <!-- </br> -->
+                <div id="input2">
+                    <input class="keywords" id="keyword_2" name="keyword_2">
+                    <!-- </br> -->
+                </div>
+                <div id="input3">
+                    <input class="keywords" id="keyword_3" name="keyword_3">
+                    <!-- </br> -->
+                </div>
+                <div id="input4">
+                    <input class="keywords" id="keyword_4" name="keyword_4">
+                    <!-- </br> -->
+                </div>
+                <img id="addBtn" src="static/images/add.png" alt="Add keyword">
+                </br>
+            </section>
+            </br>
+            </br>
+            </br>
+            <section id="bottom">
+                <div class="field">
+                    <select class="select" id="citationCount" name="citationCount">
+                        <option>- Number of citations -</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                    </select>
+                </div>
+                <!-- <p>Number of citations:</p>
+                <select id="citationCount" name="citationCount">
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                </select>
+                </br> -->
+                </br>
+                </br>
+                </br>
+                <a id="index_button" href="javascript:{}" onclick="document.getElementById('form1').submit();">Submit</a>
+                <button class="Btns" id="citeBtn" style="display:none">Cite</button>
+                </br>
+                </br>
+                </br>
+                </br>
+                </br>
+                </br>
+                <!-- <div class="type-1">
+                    <a onclick="document.getElementById('form1').submit();" id="citeBtn" href="" class="btn btn-1">
+                        <span class="txt">CITE</span>
+                        <span class="round">
+                            <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                        </span>
+                    </a>
+                </div> -->
+            </section>
+        </form>
+    </main>
+    <script src="static/correct.js"></script>
+</body>
+
+</html>

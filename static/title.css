@@ -12,6 +12,13 @@ h1 {
 	text-transform: uppercase;
 }
 
+@media only screen and (max-width: 450px) {
+  h1 {
+		font-size: 40px;
+		letter-spacing: 15px;
+  }
+}
+
 h2 {
 	color:black;
 	font-family: 'Roboto';

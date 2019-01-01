@@ -504,6 +504,10 @@ tr {
 
 footer {
 	font-size: 10px;
+	position: absolute;
+	bottom: 0;
+	text-align: center;
+	width: 100%;
 }
 
 footer div {
@@ -519,5 +523,10 @@ footer a {
     text-decoration: none;
 		text-transform: none;
 		font-size: 10px;
+}
+
+footer a:hover {
+	border-bottom: 1px solid black;
+	cursor: pointer;
 }
 

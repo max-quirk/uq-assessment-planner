@@ -155,11 +155,9 @@ def hello():
 @app.route("/export/", methods=['GET', 'POST'])
 def export():
     print('exporting')
-    store = file.Storage('token.json')
     for course_assessments in all_course_assessment:
         for assessment in course_assessments:
             print(assessment)
-            creds = store.get()
             if formatDate(assessment['due_date']) != None:
                 calExport(
                     assessment['course_code'].upper(), 
@@ -167,9 +165,7 @@ def export():
                     assessment['weighting'], 
                     assessment['learning_obj'], 
                     formatDate(assessment['due_date']),
-                    creds
                 )
-    os.remove('token.json')
     print('SUCCESSFULLY ADDED ALL EVENTS')
 
     return 'some ajax'

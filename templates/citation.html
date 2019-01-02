@@ -48,7 +48,7 @@
             </div>
 
             <div id="chronological" class="tabcontent">
-                <p>NOTE: Assessment items without a specific due date may not appear here</p>
+                <p>NOTE: Assessment items without a specific due date on the ECP will not appear here</p>
                 <div style="overflow-x:auto;">
                     <table>
                         <tr>
@@ -69,7 +69,7 @@
             <br>
             <div class="success-message-div">
                 <p class="success-message">Success.</p>
-                <p>NOTE: Assessment items without a specific due date may not appear on your calendar</p>
+                <p>NOTE: Assessment items without a specific due date on the ECP will not appear on your calendar</p>
             </div>
             <br>
             <br>
@@ -81,14 +81,15 @@
             console.log('exporting')
             e.preventDefault();
             $.ajax({
-                url: 'http://127.0.0.1:5000/export/',
+                url: '/export',
                 method: 'POST',
-                data: { 'hello': 2 },
-                success: function (data) {
-                    2
-                }
-            });
-            $('.success-message-div').css('display', 'block');
+                data: { 'hello': 2 }
+            })
+                .done(function (data) {
+                    if (data.success) {
+                        $('.success-message-div').css('display', 'block');
+                    }
+                });
         });
     </script>
 </body>

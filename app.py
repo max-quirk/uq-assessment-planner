@@ -152,7 +152,7 @@ def hello():
     return render_template('citation.html', by_course_as_html=by_course_as_html, chronological_html=chronological_html)
 
 
-@app.route("/export/", methods=['GET', 'POST'])
+@app.route("/export", methods=['GET', 'POST'])
 def export():
     print('exporting')
     for course_assessments in all_course_assessment:
@@ -168,7 +168,7 @@ def export():
                 )
     print('SUCCESSFULLY ADDED ALL EVENTS')
 
-    return 'some ajax'
+    return jsonify({'success': 'All events added'})
 
 
 if __name__ == "__main__":

@@ -133,6 +133,7 @@ body {
 	border-radius: 6px;
 	box-shadow: 3px 2px 7px rgba(81, 35, 122, 0.75);
 	text-shadow: inset 7px 0px 5px px rgba(66,66,66,.75);
+	text-transform: uppercase;
 }
 .courses {
 	outline:none;

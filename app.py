@@ -5,6 +5,8 @@ import scrape.helpers as helpers
 from calendar_export import calExport
 import dateparser
 import os
+from oauth2client import file, client, tools
+
 app = Flask(__name__)
 app.debug = True
 
@@ -153,19 +155,24 @@ def hello():
 @app.route("/export/", methods=['GET', 'POST'])
 def export():
     print('exporting')
+    store = file.Storage('token.json')
     for course_assessments in all_course_assessment:
         for assessment in course_assessments:
             print(assessment)
+            creds = store.get()
             if formatDate(assessment['due_date']) != None:
                 calExport(
                     assessment['course_code'].upper(), 
                     assessment['name'], 
                     assessment['weighting'], 
                     assessment['learning_obj'], 
-                    formatDate(assessment['due_date'])
+                    formatDate(assessment['due_date']),
+                    creds
                 )
+    os.remove('token.json')
+    print('SUCCESSFULLY ADDED ALL EVENTS')
 
-    return 'aids'
+    return 'some ajax'
 
 
 if __name__ == "__main__":

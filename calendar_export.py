@@ -29,8 +29,9 @@ def calExport(course, assessment_name, weighting, learning_obj, due_date):
         'timeZone': 'Australia/Brisbane',
       }
     }
-
+    print('failed here')
     store = file.Storage('token.json')
+    print('no it didnt')
     creds = store.get()
     if not creds or creds.invalid:
         flow = client.flow_from_clientsecrets('credentials.json', SCOPES)

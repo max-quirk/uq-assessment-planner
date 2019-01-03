@@ -41,9 +41,9 @@ def calExport(course, assessment_name, weighting, learning_obj, due_date):
         creds = tools.run_flow(flow, store)
         print('no it didnt')
     
-    print('no it didnt')
+    print('no it didntX')
     service = build('calendar', 'v3', http=creds.authorize(Http()))
-    print('no it didnt')
+    print('no it didntX')
     event = service.events().insert(calendarId='primary', body=event).execute()
-    print('no it didnt')
+    print('no it didntX')
     print('event added')

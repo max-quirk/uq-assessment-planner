@@ -33,10 +33,17 @@ def calExport(course, assessment_name, weighting, learning_obj, due_date):
     store = file.Storage('token.json')
     print('no it didnt')
     creds = store.get()
+    print('no it didnt')
     if not creds or creds.invalid:
+        print('no it didnt')
         flow = client.flow_from_clientsecrets('credentials.json', SCOPES)
+        print('no it didnt')
         creds = tools.run_flow(flow, store)
-        
+        print('no it didnt')
+    
+    print('no it didnt')
     service = build('calendar', 'v3', http=creds.authorize(Http()))
+    print('no it didnt')
     event = service.events().insert(calendarId='primary', body=event).execute()
+    print('no it didnt')
     print('event added')

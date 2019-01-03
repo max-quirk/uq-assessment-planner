@@ -7,7 +7,9 @@
     <link href='https://fonts.googleapis.com/css?family=Cormorant+Garamond:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
     <title>UQ Assessment Planner</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="static/title.css">
+    <link rel="stylesheet" type="text/css" href="static/title.css" />
+    <link rel="stylesheet" type="text/css" href="static/loading.css" />
+    <link rel="stylesheet" type="text/css" href="static/loading-btn.css" />
     <link rel="stylesheet/less" type="text/css" href="static/button.less">
     <link rel="stylesheet" href="static/bbulma-0.6.1/css/bulma.css">
     <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
@@ -64,11 +66,16 @@
 
 
             <form id="export-form">
-                <button class="button arrow">Export to Google Calendar</button>
+                <!-- <button class="button arrow"> -->
+                <button class="export-button">
+                    <div class="btn btn-default ld-ext-right button arrow">
+                        Export to Google Calendar
+                        <div class="ld ld-ball ld-flip"></div>
+                    </div>
+                </button>
             </form>
             <br>
             <div class="success-message-div">
-                <p class="success-message">Success.</p>
                 <p>NOTE: Assessment items without a specific due date on the ECP will not appear on your calendar</p>
             </div>
             <br>
@@ -79,6 +86,8 @@
     <script>
         $('#export-form').on('submit', function (e) {
             console.log('exporting')
+            $('.ld-ext-right').addClass("running")
+            $('.button').addClass("after-gone")
             e.preventDefault();
             $.ajax({
                 url: '/export',
@@ -87,6 +96,10 @@
             })
                 .done(function (data) {
                     if (data.success) {
+                        $('.ld-ext-right').removeClass("running");
+                        $('.ld-ext-right').addClass("success-button");
+                        $('.ld-ext-right').html("Success &nbsp &nbsp &#10004");
+                        $(".export-button").attr("disabled", "disabled");
                         $('.success-message-div').css('display', 'block');
                     }
                 });

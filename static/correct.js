@@ -51,6 +51,19 @@ function change() {
     console.log('title_page')
 }
 
+function submitCourseForm() {
+    if (document.getElementById('course-1').value != ''
+        && document.getElementById('course-1').value != '') {
+        document.getElementById('circularG').style.display = 'block';
+        document.getElementById('empty-course-notice').style.display = 'none';
+        document.getElementById('form_div').style.display = 'none';
+        document.getElementById('form1').submit();
+    }
+    else {
+        document.getElementById('empty-course-notice').style.display = 'block';
+    }
+}
+
 function addInput(e) {
     inputNum += 1
     console.log(inputNum)

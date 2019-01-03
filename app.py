@@ -6,6 +6,7 @@ from calendar_export import calExport
 import dateparser
 import os
 from oauth2client import file, client, tools
+import sys
 
 app = Flask(__name__)
 app.debug = True
@@ -155,6 +156,7 @@ def hello():
 @app.route("/export", methods=['GET', 'POST'])
 def export():
     print('exporting')
+    sys.stdout.flush()
     for course_assessments in all_course_assessment:
         for assessment in course_assessments:
             print(assessment)

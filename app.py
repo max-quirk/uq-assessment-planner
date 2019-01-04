@@ -109,7 +109,7 @@ def export():
 
     return jsonify({'success': 'All events added'})
 
-@app.route("/authorize", methods=['POST'])
+@app.route("/authorize")
 def authorize():
     print('debug1')
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file('client_secret.json', scopes=SCOPE)
@@ -122,7 +122,7 @@ def authorize():
     print('debug4')
     #flask.session['state'] = state
     print('debug5')
-    return flask.redirect(authorization_url, code=307)
+    return flask.redirect(authorization_url)
 
 @app.route('/oauth2callback')
 def oauth2callback():

@@ -144,7 +144,7 @@ def oauth2callback():
   credentials = flow.credentials
   flask.session['credentials'] = credentials_to_dict(credentials)
 
-  return flask.redirect(flask.url_for('test_api_request'))
+  return flask.redirect('export')
 
 
 def credentials_to_dict(credentials):

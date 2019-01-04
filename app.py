@@ -111,13 +111,17 @@ def export():
 
 @app.route("/authorize", methods=['GET', 'POST'])
 def authorize():
+    print('debug1')
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file('client_secret.json', scopes=SCOPE)
+    print('debug2')
     flow.redirect_uri = flask.url_for('oauth2callback', _external=True)
+    print('debug3')
     authorization_url, state = flow.authorization_url(
         access_type='offline',
         include_granted_scopes='true')
-
+    print('debug4')
     flask.session['state'] = state
+    print('debug5')
     return flask.redirect(authorization_url)
 
 @app.route('/oauth2callback')

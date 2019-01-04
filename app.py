@@ -102,7 +102,7 @@ def export():
                         'timeZone': 'Australia/Brisbane',
                     }
                 }
-                
+
                 calExport(calendar, event)
 
     print('SUCCESSFULLY ADDED ALL EVENTS')
@@ -111,7 +111,7 @@ def export():
 
 @app.route("/authorize", methods=['GET', 'POST'])
 def authorize():
-    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file('client_secret.json', scope=SCOPE)
+    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file('client_secret.json', scopes=SCOPE)
     flow.redirect_uri = flask.url_for('oauth2callback', _external=True)
     authorization_url, state = flow.authorization_url(
         access_type='offline',

@@ -120,7 +120,7 @@ def authorize():
         access_type='offline',
         include_granted_scopes='true')
     print('debug4')
-    flask.session['state'] = state
+    #flask.session['state'] = state
     print('debug5')
     return flask.redirect(authorization_url)
 

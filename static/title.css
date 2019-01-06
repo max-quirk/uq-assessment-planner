@@ -21,10 +21,10 @@ h1 {
 
 h2 {
 	color:black;
-	font-family: 'Roboto';
+	font-family: 'Roboto', sans-serif;
 	font-size: 25px;
 	font-style: italic;
-	font-weight: 400;
+	font-weight: 300;
 	line-height: 48px;
 	max-width: 640px;
 	margin: 0 auto 48px;
@@ -34,9 +34,9 @@ h2 {
 p {
 	color: black;
     margin: auto;
-    font-family: 'Roboto';
+    font-family: 'Roboto', sans-serif;
     font-size: 17px;
-    font-weight: 400;
+    font-weight: 300;
     line-height: 30px;
     max-width: 700px;
 		text-align: center;
@@ -48,9 +48,9 @@ p {
 
 a {
 	color: #51237A;	border-bottom: 2px solid #51237A;
-	font-family: 'Roboto';
+	font-family: 'Roboto', sans-serif;
 	font-size: 16px;
-	font-weight: 700;
+	font-weight: 400;
 	letter-spacing: 3px;
 	text-decoration: none;
 	text-transform: uppercase;
@@ -127,7 +127,7 @@ body {
 	padding: 13px;
 	font-size: 16px;
 	text-align: center;
-	font-family: 'Roboto';
+	font-family: 'Roboto', sans-serif;
 	margin: 8px auto;
 	border-width: 1px;
 	border-color: #51237A;
@@ -138,6 +138,7 @@ body {
 	box-shadow: 3px 2px 7px rgba(81, 35, 122, 0.75);
 	text-shadow: inset 7px 0px 5px px rgba(66,66,66,.75);
 	text-transform: uppercase;
+	font-weight: 300;
 }
 .courses {
 	outline:none;
@@ -180,7 +181,7 @@ body {
 	margin: 0;
 	text-align: left;
 	margin-left: 80px;
-	font-family: 'Roboto';
+	font-family: 'Roboto', sans-serif;
 	text-transform: uppercase;
 }
 
@@ -191,14 +192,14 @@ body {
 	font-size: 16px;
 	text-align: left;
 	margin-left: 80px;
-	font-family: 'Roboto';
+	font-family: 'Roboto', sans-serif;
 }
 
 .due-date {
 	margin-top: 0px;
 	text-align: left;
 	margin-left: 80px;
-	font-family: 'Roboto';
+	font-family: 'Roboto', sans-serif;
 	font-size: 16px;
 }
 
@@ -206,7 +207,7 @@ body {
 	margin-top: 0px;
 	text-align: left;
 	margin-left: 80px;
-	font-family: 'Roboto';
+	font-family: 'Roboto', sans-serif;
 	font-size: 16px;
 }
 
@@ -519,12 +520,13 @@ footer {
 footer div {
 	margin-bottom: 5px;
 	padding-right: 18px;
+	font-family: 'Roboto', sans-serif;
 }
 
 footer a {
 	color: black;
     border-bottom: none;
-    font-family: 'Roboto';
+    font-family: 'Roboto', sans-serif;
     font-weight: 500;
     letter-spacing: 0px;
     text-decoration: none;
@@ -542,7 +544,7 @@ footer a:hover {
 .btn {
 	display: inline-block;
 	margin-bottom: 0;
-	font-weight: 400;
+	font-weight: 300;
 	text-align: center;
 	vertical-align: middle;
 	-ms-touch-action: manipulation;

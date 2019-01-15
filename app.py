@@ -300,13 +300,17 @@ def oauth2callback():
 
     # Use the authorization server's response to fetch the OAuth 2.0 tokens.
     authorization_response = flask.request.url
+    print('fucks sake')
     flow.fetch_token(authorization_response=authorization_response)
+    print('fucks sake')
 
     # Store credentials in the session.
     # ACTION ITEM: In a production app, you likely want to save these
     #              credentials in a persistent database instead.
     credentials = flow.credentials
+    print('fucks sake')
     flask.session['credentials'] = credentials_to_dict(credentials)
+    print('fucks sake')
 
     return flask.redirect('export')
 

@@ -290,7 +290,7 @@ def authorize():
 def oauth2callback():
   # Specify the state when creating the flow in the callback so that it can
   # verified in the authorization server response.
-  state = flask.session['state']
+  #state = flask.session['state']
 
   flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
       CLIENT_SECRETS_FILE, scopes=SCOPE, state=state)

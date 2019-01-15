@@ -282,7 +282,7 @@ def authorize():
         include_granted_scopes='true')
     print('debug4')
     #flask.session['state'] = state
-    print('debug5')
+    print('debug6')
     print(authorization_url)
     return flask.redirect(authorization_url)
 

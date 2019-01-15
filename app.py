@@ -18,6 +18,8 @@ CLIENT_SECRETS_FILE = "client_secret.json"
 SCOPE = 'https://www.googleapis.com/auth/calendar'
 API_SERVICE_NAME = 'calendar'
 API_VERSION = 'v3'
+db = Db(detailed=False)
+db.connect("uq_catalogue", "maxquirk", "", "localhost")
 
 app = Flask(__name__)
 app.debug = True
@@ -27,48 +29,101 @@ port = int(os.environ.get('PORT', 5000))
 
 
 def formatDate(date):
-    return dateparser.parse(date)
+    print(date)
+    #check if date contains no digits
+    if not any(char.isdigit() for char in date):
+        return None
+
+    dates = date.split('-')
+    if len(dates) > 1:
+        date1 = dateparser.parse(dates[0])
+        date2 = dateparser.parse(dates[1])
+        if date1 and date2:
+            if date1.date() == date2.date():
+                date = dates[0]
+                return dateparser.parse(date)
+    print('parsing date...')
+    date = dateparser.parse(date)
+    print('parsed')
+    return date
 
 def getProfileID(course_code):
-    base_url = 'http://www.uq.edu.au/study/course.html?course_code=%s' \
-        % course_code
-    soup = helpers.get_soup(base_url)
-    if soup is None or soup.find(id="course-notfound"):
-        return None
-    profileID = soup.find(class_='profile-available')['href'].split('=')[-1]
-    return profileID
+    print('getting profile id...')
+    query = "SELECT course_profile_id FROM course WHERE course_code = '%s'" % (course_code.upper())
+    profileID = db.select(query)
+    if profileID:
+        print('finished getting profile id')
+        return profileID[0][0]
+    # base_url = 'http://www.uq.edu.au/study/course.html?course_code=%s' \
+    #     % course_code
+    # soup = helpers.get_soup(base_url)
+    # if soup is None or soup.find(id="course-notfound"):
+    #     return None
+    # profileID = soup.find(class_='profile-available')['href'].split('=')[-1]
+    return None
 
 
 def getAssessments(profileID, course_code):
-    ECP_url = "https://www.courses.uq.edu.au/student_section_loader.php?section=5&profileId=%s" % profileID
+    # ECP_url = "https://www.courses.uq.edu.au/student_section_loader.php?section=5&profileId=%s" % profileID
+    print('getting assessments...')
+    query = """
+            SELECT assessment_name, due_date, weighting, learning_obj 
+            FROM course_assessment
+            WHERE course_code = '%s'
+            """ % (course_code.upper())
+    unformatted_assessments = db.select(query)
 
-    # gets all tables on the page
-    all_tables = pd.read_html(ECP_url, match='Assessment Task')
-    # gets table containing desired information
-    table = all_tables[2]
-    table_length = table.shape[0] - 1
-    print(table)
+    if not unformatted_assessments:
+        return 
+
     assessments = []
-    i = 1
 
-    while i <= table_length:
-        name = table.at[i, 0]
-        print(splitName)
-        due_date = table.at[i, 1]
-        weighting = table.at[i, 2]
-        learning_obj = table.at[i, 3]
+    for i, unformatted_assessment in enumerate(unformatted_assessments):
+        name = unformatted_assessments[i][0]
+        due_date = unformatted_assessments[i][1]
+        weighting = unformatted_assessments[i][2]
+        learning_obj = unformatted_assessments[i][3]
 
         assessment = {
-            'course_code': course_code,
-            'name': splitName(name),
-            'due_date': due_date,
-            'weighting': weighting,
-            'learning_obj': learning_obj
+                'course_code': course_code,
+                'name': name,
+                'due_date': due_date,
+                'weighting': weighting,
+                'learning_obj': learning_obj
         }
+
         assessments.append(assessment)
 
-        i += 1
+    # # gets all tables on the page
+    # all_tables = pd.read_html(ECP_url, match='Assessment Task')
+    # # gets tables containing desired information
+    # all_tables = all_tables[2:]
+    # assessments = []
+    # for table in all_tables:
+    #     table_length = table.shape[0] - 1
+    #     i = 1
 
+    #     while i <= table_length:
+            
+    #         name = table.at[i, 0]
+    #         print(splitName(name))
+    #         due_date = table.at[i, 1]
+    #         weighting = table.at[i, 2]
+    #         learning_obj = table.at[i, 3]
+
+    #         assessment = {
+    #             'course_code': course_code,
+    #             'name': splitName(name),
+    #             'due_date': due_date,
+    #             'weighting': weighting,
+    #             'learning_obj': learning_obj
+    #         }
+    #         assessments.append(assessment)
+
+    #         i += 1
+
+    print('finished getting assessments')
+    
     return assessments
 
 
@@ -84,6 +139,7 @@ def splitName(name):  # Separates assessment type from assessment name
 
 
 def makeHTML(all_course_assessments):
+    print('making html...')
     html = ''
     html += '<div class="row">'
     columns = len(all_course_assessments)
@@ -101,17 +157,18 @@ def makeHTML(all_course_assessments):
                 assessment.get('weighting') + '</p>'
         html += '</div>'
     html += '</div>'
+    print('finished making html')
     return html
 
 def makeChronologicalHTML(all_course_assessments):
+    print('making chronological html...')
     formatable_assessments = []
     for course in all_course_assessment:
         for assessment in course:
+            print(assessment)
             if formatDate(assessment.get('due_date')) != None:
                 formatable_assessments.append(assessment)
-
     formatable_assessments = sorted(formatable_assessments, key=lambda k: formatDate(k['due_date'])) 
-
     html = ''
     for assessment in formatable_assessments:
         title = '%s - %s' % (assessment.get('course_code').upper(), assessment.get('name'))
@@ -122,7 +179,7 @@ def makeChronologicalHTML(all_course_assessments):
         html += '<td>%s</td>' % assessment.get('learning_obj')
         html += '</tr>'
     
-
+    print('finished making chronological html')
     return html
 
 def calExport(calendar, event):
@@ -173,9 +230,10 @@ def export():
     sys.stdout.flush()
     if 'credentials' not in flask.session:
         return flask.redirect('authorize')
-
+    print('didnt authorize')
     credentials = google.oauth2.credentials.Credentials(
       **flask.session['credentials'])
+    print('got to here')
 
     calendar = googleapiclient.discovery.build(
         API_SERVICE_NAME, API_VERSION, credentials=credentials)
@@ -225,6 +283,7 @@ def authorize():
     print('debug4')
     #flask.session['state'] = state
     print('debug5')
+    print(authorization_url)
     return flask.redirect(authorization_url)
 
 @app.route('/oauth2callback')

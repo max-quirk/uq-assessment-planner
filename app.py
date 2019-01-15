@@ -93,7 +93,7 @@ def getAssessments(profileID, course_code):
     #     }
 
     #     assessments.append(assessment)
-
+    ECP_url = 'https://www.courses.uq.edu.au/student_section_loader.php?section=5&profileId=%s' % profileID
     # gets all tables on the page
     all_tables = pd.read_html(ECP_url, match='Assessment Task')
     # gets tables containing desired information

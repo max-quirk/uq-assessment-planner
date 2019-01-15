@@ -66,61 +66,61 @@ def getProfileID(course_code):
 def getAssessments(profileID, course_code):
     # ECP_url = "https://www.courses.uq.edu.au/student_section_loader.php?section=5&profileId=%s" % profileID
     print('getting assessments...')
-    query = """
-            SELECT assessment_name, due_date, weighting, learning_obj 
-            FROM course_assessment
-            WHERE course_code = '%s'
-            """ % (course_code.upper())
-    unformatted_assessments = db.select(query)
+    # query = """
+    #         SELECT assessment_name, due_date, weighting, learning_obj 
+    #         FROM course_assessment
+    #         WHERE course_code = '%s'
+    #         """ % (course_code.upper())
+    # unformatted_assessments = db.select(query)
 
-    if not unformatted_assessments:
-        return 
+    # if not unformatted_assessments:
+    #     return 
 
-    assessments = []
-
-    for i, unformatted_assessment in enumerate(unformatted_assessments):
-        name = unformatted_assessments[i][0]
-        due_date = unformatted_assessments[i][1]
-        weighting = unformatted_assessments[i][2]
-        learning_obj = unformatted_assessments[i][3]
-
-        assessment = {
-                'course_code': course_code,
-                'name': name,
-                'due_date': due_date,
-                'weighting': weighting,
-                'learning_obj': learning_obj
-        }
-
-        assessments.append(assessment)
-
-    # # gets all tables on the page
-    # all_tables = pd.read_html(ECP_url, match='Assessment Task')
-    # # gets tables containing desired information
-    # all_tables = all_tables[2:]
     # assessments = []
-    # for table in all_tables:
-    #     table_length = table.shape[0] - 1
-    #     i = 1
 
-    #     while i <= table_length:
-            
-    #         name = table.at[i, 0]
-    #         print(splitName(name))
-    #         due_date = table.at[i, 1]
-    #         weighting = table.at[i, 2]
-    #         learning_obj = table.at[i, 3]
+    # for i, unformatted_assessment in enumerate(unformatted_assessments):
+    #     name = unformatted_assessments[i][0]
+    #     due_date = unformatted_assessments[i][1]
+    #     weighting = unformatted_assessments[i][2]
+    #     learning_obj = unformatted_assessments[i][3]
 
-    #         assessment = {
+    #     assessment = {
     #             'course_code': course_code,
-    #             'name': splitName(name),
+    #             'name': name,
     #             'due_date': due_date,
     #             'weighting': weighting,
     #             'learning_obj': learning_obj
-    #         }
-    #         assessments.append(assessment)
+    #     }
 
-    #         i += 1
+    #     assessments.append(assessment)
+
+    # gets all tables on the page
+    all_tables = pd.read_html(ECP_url, match='Assessment Task')
+    # gets tables containing desired information
+    all_tables = all_tables[2:]
+    assessments = []
+    for table in all_tables:
+        table_length = table.shape[0] - 1
+        i = 1
+
+        while i <= table_length:
+            
+            name = table.at[i, 0]
+            print(splitName(name))
+            due_date = table.at[i, 1]
+            weighting = table.at[i, 2]
+            learning_obj = table.at[i, 3]
+
+            assessment = {
+                'course_code': course_code,
+                'name': splitName(name),
+                'due_date': due_date,
+                'weighting': weighting,
+                'learning_obj': learning_obj
+            }
+            assessments.append(assessment)
+
+            i += 1
 
     print('finished getting assessments')
     

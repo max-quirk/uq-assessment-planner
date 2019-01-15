@@ -49,18 +49,18 @@ def formatDate(date):
 
 def getProfileID(course_code):
     print('getting profile id...')
-    query = "SELECT course_profile_id FROM course WHERE course_code = '%s'" % (course_code.upper())
-    profileID = db.select(query)
-    if profileID:
-        print('finished getting profile id')
-        return profileID[0][0]
-    # base_url = 'http://www.uq.edu.au/study/course.html?course_code=%s' \
-    #     % course_code
-    # soup = helpers.get_soup(base_url)
-    # if soup is None or soup.find(id="course-notfound"):
-    #     return None
-    # profileID = soup.find(class_='profile-available')['href'].split('=')[-1]
-    return None
+    # query = "SELECT course_profile_id FROM course WHERE course_code = '%s'" % (course_code.upper())
+    # profileID = db.select(query)
+    # if profileID:
+    #     print('finished getting profile id')
+    #     return profileID[0][0]
+    base_url = 'http://www.uq.edu.au/study/course.html?course_code=%s' \
+        % course_code
+    soup = helpers.get_soup(base_url)
+    if soup is None or soup.find(id="course-notfound"):
+        return None
+    profileID = soup.find(class_='profile-available')['href'].split('=')[-1]
+    return profileID
 
 
 def getAssessments(profileID, course_code):

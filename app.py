@@ -29,23 +29,24 @@ port = int(os.environ.get('PORT', 5000))
 
 
 def formatDate(date):
-    print(date)
-    #check if date contains no digits
-    if not any(char.isdigit() for char in date):
-        return None
+    # print(date)
+    # #check if date contains no digits
+    # if not any(char.isdigit() for char in date):
+    #     return None
 
-    dates = date.split('-')
-    if len(dates) > 1:
-        date1 = dateparser.parse(dates[0])
-        date2 = dateparser.parse(dates[1])
-        if date1 and date2:
-            if date1.date() == date2.date():
-                date = dates[0]
-                return dateparser.parse(date)
-    print('parsing date...')
+    # dates = date.split('-')
+    # if len(dates) > 1:
+    #     date1 = dateparser.parse(dates[0])
+    #     date2 = dateparser.parse(dates[1])
+    #     if date1 and date2:
+    #         if date1.date() == date2.date():
+    #             date = dates[0]
+    #             return dateparser.parse(date)
+    # print('parsing date...')
     # date = dateparser.parse(date)
-    print('parsed')
-    return date
+    # print('parsed')
+    # return date 
+    return None
 
 def getProfileID(course_code):
     print('getting profile id...')
@@ -168,6 +169,7 @@ def makeChronologicalHTML(all_course_assessments):
             print(assessment)
             if formatDate(assessment.get('due_date')) != None:
                 formatable_assessments.append(assessment)
+    print(formatable_assessments)
     if formatable_assessments:
         formatable_assessments = sorted(formatable_assessments, key=lambda k: formatDate(k['due_date'])) 
         html = ''

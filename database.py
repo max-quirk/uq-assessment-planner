@@ -3,6 +3,8 @@ Database Utility
 """
 
 import psycopg2
+import os
+
 
 
 class Db(object):
@@ -19,10 +21,18 @@ class Db(object):
         """ Establishes connection with psql server
         """
         try:
-            connect_str = "dbname='%s' user='%s' host='%s' password='%s'" % \
-                (dbname, username, host, password)
-            self._conn = psycopg2.connect(connect_str)
+            # connect_str = "dbname='%s' user='%s' host='%s' password='%s'" % \
+            #     (dbname, username, host, password)
+            # self._conn = psycopg2.connect(connect_str)
+            # self._cursor = self._conn.cursor()
+
+
+            DATABASE_URL = os.environ['DATABASE_URL']
+
+            #self._conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+            self._conn = psycopg2.connect(DATABASE_URL)
             self._cursor = self._conn.cursor()
+
         except Exception as e:
             print("Error connecting to database\n", e)
 

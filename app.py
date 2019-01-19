@@ -49,78 +49,78 @@ def formatDate(date):
 
 def getProfileID(course_code):
     print('getting profile id...')
-    # query = "SELECT course_profile_id FROM course WHERE course_code = '%s'" % (course_code.upper())
-    # profileID = db.select(query)
-    # if profileID:
-    #     print('finished getting profile id')
-    #     return profileID[0][0]
-    base_url = 'http://www.uq.edu.au/study/course.html?course_code=%s' \
-        % course_code
-    soup = helpers.get_soup(base_url)
-    if soup is None or soup.find(id="course-notfound"):
-        return None
-    profileID = soup.find(class_='profile-available')['href'].split('=')[-1]
-    return profileID
+    query = "SELECT course_profile_id FROM course WHERE course_code = '%s'" % (course_code.upper())
+    profileID = db.select(query)
+    if profileID:
+        print('finished getting profile id')
+        return profileID[0][0]
+    # base_url = 'http://www.uq.edu.au/study/course.html?course_code=%s' \
+    #     % course_code
+    # soup = helpers.get_soup(base_url)
+    # if soup is None or soup.find(id="course-notfound"):
+    #     return None
+    # profileID = soup.find(class_='profile-available')['href'].split('=')[-1]
+    # return profileID
 
 
 def getAssessments(profileID, course_code):
     # ECP_url = "https://www.courses.uq.edu.au/student_section_loader.php?section=5&profileId=%s" % profileID
     print('getting assessments...')
-    # query = """
-    #         SELECT assessment_name, due_date, weighting, learning_obj 
-    #         FROM course_assessment
-    #         WHERE course_code = '%s'
-    #         """ % (course_code.upper())
-    # unformatted_assessments = db.select(query)
+    query = """
+            SELECT assessment_name, due_date, weighting, learning_obj 
+            FROM course_assessment
+            WHERE course_code = '%s'
+            """ % (course_code.upper())
+    unformatted_assessments = db.select(query)
 
-    # if not unformatted_assessments:
-    #     return 
+    if not unformatted_assessments:
+        return 
 
-    # assessments = []
-
-    # for i, unformatted_assessment in enumerate(unformatted_assessments):
-    #     name = unformatted_assessments[i][0]
-    #     due_date = unformatted_assessments[i][1]
-    #     weighting = unformatted_assessments[i][2]
-    #     learning_obj = unformatted_assessments[i][3]
-
-    #     assessment = {
-    #             'course_code': course_code,
-    #             'name': name,
-    #             'due_date': due_date,
-    #             'weighting': weighting,
-    #             'learning_obj': learning_obj
-    #     }
-
-    #     assessments.append(assessment)
-    ECP_url = 'https://www.courses.uq.edu.au/student_section_loader.php?section=5&profileId=%s' % profileID
-    # gets all tables on the page
-    all_tables = pd.read_html(ECP_url, match='Assessment Task')
-    # gets tables containing desired information
-    all_tables = all_tables[2:]
     assessments = []
-    for table in all_tables:
-        table_length = table.shape[0] - 1
-        i = 1
 
-        while i <= table_length:
-            
-            name = table.at[i, 0]
-            print(splitName(name))
-            due_date = table.at[i, 1]
-            weighting = table.at[i, 2]
-            learning_obj = table.at[i, 3]
+    for i, unformatted_assessment in enumerate(unformatted_assessments):
+        name = unformatted_assessments[i][0]
+        due_date = unformatted_assessments[i][1]
+        weighting = unformatted_assessments[i][2]
+        learning_obj = unformatted_assessments[i][3]
 
-            assessment = {
+        assessment = {
                 'course_code': course_code,
-                'name': splitName(name),
+                'name': name,
                 'due_date': due_date,
                 'weighting': weighting,
                 'learning_obj': learning_obj
-            }
-            assessments.append(assessment)
+        }
 
-            i += 1
+        assessments.append(assessment)
+    # ECP_url = 'https://www.courses.uq.edu.au/student_section_loader.php?section=5&profileId=%s' % profileID
+    # # gets all tables on the page
+    # all_tables = pd.read_html(ECP_url, match='Assessment Task')
+    # # gets tables containing desired information
+    # all_tables = all_tables[2:]
+    # assessments = []
+    # for table in all_tables:
+    #     table_length = table.shape[0] - 1
+    #     i = 1
+
+    #     while i <= table_length:
+            
+    #         name = table.at[i, 0]
+    #         print(splitName(name))
+    #         due_date = table.at[i, 1]
+    #         weighting = table.at[i, 2]
+    #         learning_obj = table.at[i, 3]
+
+    #         assessment = {
+    #             'course_code': course_code,
+    #             'name': splitName(name),
+    #             'due_date': due_date,
+    #             'weighting': weighting,
+    #             'learning_obj': learning_obj
+    #         }
+    #         assessments.append(assessment)
+
+    #         i += 1
 
     print('finished getting assessments')
     
@@ -273,7 +273,7 @@ def export():
 @app.route("/authorize")
 def authorize():
     print('debug1')
-    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file('client_secret.json', scopes=SCOPE)
+    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file('client_secret_local.json', scopes=SCOPE)
     print('debug2')
     flow.redirect_uri = flask.url_for('oauth2callback', _external=True)
     print('debug3')

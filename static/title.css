@@ -269,6 +269,7 @@ body {
 	width:135px;
 	height:135px;
 	margin: auto;
+	margin-bottom: 300px;
 }
 
 .circularG{
@@ -491,7 +492,8 @@ body {
 table {
 	width: 100%;
 	margin-bottom: 50px;
-	font-family: "Roboto";
+	font-family: "Roboto", sans-serif;
+	font-weight: 300;
 }
 
 tr {
@@ -510,7 +512,6 @@ tr {
 
 footer {
 	font-size: 10px;
-	position: absolute;
 	bottom: 0;
 	text-align: center;
 	width: 100%;

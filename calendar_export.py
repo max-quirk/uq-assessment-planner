@@ -5,6 +5,10 @@ from googleapiclient.discovery import build
 from httplib2 import Http
 from oauth2client import file, client, tools
 from datetime import timedelta 
+import google_auth_oauthlib.flow
+import google.oauth2.credentials
+import flask
+
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = 'https://www.googleapis.com/auth/calendar'
@@ -36,7 +40,11 @@ def calExport(course, assessment_name, weighting, learning_obj, due_date):
     print('no it didnt')
     if not creds or creds.invalid:
         print('no it didnt')
-        flow = client.flow_from_clientsecrets('credentials.json', SCOPES)
+        flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file('client_secret.json', scope=SCOPES)
+        authorization_url, state = flow.authorization_url(
+          access_type='offline',
+          include_granted_scopes='true')
+        return flask.redirect(authorization_url)
         print('no it didnt')
         creds = tools.run_flow(flow, store)
         print('no it didnt')

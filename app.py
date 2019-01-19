@@ -43,7 +43,7 @@ def formatDate(date):
                 date = dates[0]
                 return dateparser.parse(date)
     print('parsing date...')
-    date = dateparser.parse(date)
+    # date = dateparser.parse(date)
     print('parsed')
     return date
 

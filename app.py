@@ -168,19 +168,22 @@ def makeChronologicalHTML(all_course_assessments):
             print(assessment)
             if formatDate(assessment.get('due_date')) != None:
                 formatable_assessments.append(assessment)
-    formatable_assessments = sorted(formatable_assessments, key=lambda k: formatDate(k['due_date'])) 
-    html = ''
-    for assessment in formatable_assessments:
-        title = '%s - %s' % (assessment.get('course_code').upper(), assessment.get('name'))
-        html += '<tr>'
-        html += '<td>%s</td>' % title
-        html += '<td>%s</td>' % assessment.get('due_date')
-        html += '<td>%s</td>' % assessment.get('weighting')
-        html += '<td>%s</td>' % assessment.get('learning_obj')
-        html += '</tr>'
+    if formatable_assessments:
+        formatable_assessments = sorted(formatable_assessments, key=lambda k: formatDate(k['due_date'])) 
+        html = ''
+        for assessment in formatable_assessments:
+            title = '%s - %s' % (assessment.get('course_code').upper(), assessment.get('name'))
+            html += '<tr>'
+            html += '<td>%s</td>' % title
+            html += '<td>%s</td>' % assessment.get('due_date')
+            html += '<td>%s</td>' % assessment.get('weighting')
+            html += '<td>%s</td>' % assessment.get('learning_obj')
+            html += '</tr>'
     
-    print('finished making chronological html')
-    return html
+        print('finished making chronological html')
+        return html
+
+    return ''
 
 def calExport(calendar, event):
     event = calendar.events().insert(calendarId='primary', body=event).execute()

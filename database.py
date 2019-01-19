@@ -21,15 +21,15 @@ class Db(object):
         """ Establishes connection with psql server
         """
         try:
+            ##LOCAL VERSION
             # connect_str = "dbname='%s' user='%s' host='%s' password='%s'" % \
             #     (dbname, username, host, password)
             # self._conn = psycopg2.connect(connect_str)
             # self._cursor = self._conn.cursor()
 
-
+            #HEROKU VERSION
             DATABASE_URL = os.environ['DATABASE_URL']
 
-            #self._conn = psycopg2.connect(DATABASE_URL, sslmode='require')
             self._conn = psycopg2.connect(DATABASE_URL)
             self._cursor = self._conn.cursor()
 

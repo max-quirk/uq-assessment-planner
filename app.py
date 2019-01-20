@@ -11,7 +11,7 @@ import flask
 import google_auth_oauthlib.flow
 import google.oauth2.credentials
 import googleapiclient.discovery
-from datetime import timedelta 
+from datetime import datetime, timedelta 
 from database import Db
 
 CLIENT_SECRETS_FILE = "client_secret.json"
@@ -330,6 +330,10 @@ def credentials_to_dict(credentials):
           'client_id': credentials.client_id,
           'client_secret': credentials.client_secret,
           'scopes': credentials.scopes}
+
+@app.route('/.well-known/acme-challenge/gLguitC8-PJzAcAHOGHvlK_q_71gSJQQcB_xdpVzENQ')
+def verify():
+    return 'gLguitC8-PJzAcAHOGHvlK_q_71gSJQQcB_xdpVzENQ.jjDWwuoR6VaOPJCS3RY3gQwgiU77PLzwzYN8i2Os4Zs'
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=port)

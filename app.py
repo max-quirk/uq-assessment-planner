@@ -29,24 +29,24 @@ port = int(os.environ.get('PORT', 5000))
 
 
 def formatDate(date):
-    # print(date)
-    # #check if date contains no digits
-    # if not any(char.isdigit() for char in date):
-    #     return None
+    print(date)
+    #check if date contains no digits
+    if not any(char.isdigit() for char in date):
+        return None
 
-    # dates = date.split('-')
-    # if len(dates) > 1:
-    #     date1 = dateparser.parse(dates[0])
-    #     date2 = dateparser.parse(dates[1])
-    #     if date1 and date2:
-    #         if date1.date() == date2.date():
-    #             date = dates[0]
-    #             return dateparser.parse(date)
-    # print('parsing date...')
-    # date = dateparser.parse(date)
-    # print('parsed')
-    # return date 
-    return None
+    dates = date.split('-')
+    if len(dates) > 1:
+        date1 = dateparser.parse(dates[0])
+        date2 = dateparser.parse(dates[1])
+        if date1 and date2:
+            if date1.date() == date2.date():
+                date = dates[0]
+                return dateparser.parse(date)
+    print('parsing date...')
+    date = dateparser.parse(date)
+    print('parsed')
+    return date 
+    # return None
 
 def getProfileID(course_code):
     print('getting profile id...')
@@ -73,9 +73,11 @@ def getAssessments(profileID, course_code):
             WHERE course_code = '%s'
             """ % (course_code.upper())
     unformatted_assessments = db.select(query)
-
+    print('here')
+    print(unformatted_assessments)
+    print(not unformatted_assessments)
     if not unformatted_assessments:
-        return 
+        return None
 
     assessments = []
 
@@ -217,11 +219,14 @@ def hello():
 
     for course_code in all_courses:
         profileID = getProfileID(course_code)
-        if profileID == None:
+        print('legit here')
+        print(profileID)
+        if profileID == 0:
             error_message = '<p style="color: red">Error: One of the courses you entered was invalid. Please try again</p>'
             return render_template('title.html', error_message=error_message)
         assessments = getAssessments(profileID, course_code)
-        all_course_assessment.append(assessments)
+        if assessments:
+            all_course_assessment.append(assessments)
 
     by_course_as_html = makeHTML(all_course_assessment)
     chronological_html = makeChronologicalHTML(all_course_assessment)

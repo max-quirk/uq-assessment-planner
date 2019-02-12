@@ -14,6 +14,7 @@ dateparser = "*"
 flask = "*"
 pandas = "*"
 google-auth-oauthlib = "*"
+psycopg2 = "*"
 
 [requires]
 python_version = "3.7"

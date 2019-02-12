@@ -1,5 +1,26 @@
 # bib_bypass
 
-1. Activate the virtual environment by typing 'source env/bin/activate' in Terminal
-2. Run the __init__.py file by typing 'python __init__.py'
-3. Go to http://127.0.0.1:5000/ in your browser
+## Setup
+
+### Dependencies
+* Pipenv
+
+### Install
+
+1. Setup virtual env with pipenv
+
+```bash
+$ pipenv install
+```
+
+2. Activate shell
+
+```bash
+$ pipenv shell
+```
+
+3. Run app
+
+```bash
+$ python app.py
+```

@@ -160,6 +160,10 @@
                 data: { 'hello': 2 }
             })
                 .done(function (data) {
+                    if (data.redirect_url) {
+                        return window.open(data.redirect_url)
+                    }
+
                     if (data.success) {
                         $('.ld-ext-right').removeClass("running");
                         $('.ld-ext-right').addClass("success-button");

@@ -18,6 +18,11 @@ CLIENT_SECRETS_FILE = "client_secret.json"
 SCOPE = "https://www.googleapis.com/auth/calendar"
 API_SERVICE_NAME = "calendar"
 API_VERSION = "v3"
+
+# DEV ONLY
+os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+
+
 db = Db(detailed=False)
 db.connect("uq_catalogue", "maxquirk", "", "localhost")
 
@@ -257,13 +262,9 @@ def hello():
 
 @app.route("/export", methods=["GET", "POST"])
 def export():
-    print("exporting")
-    sys.stdout.flush()
     if "credentials" not in flask.session:
-        return flask.redirect("authorize")
-    print("didnt authorize")
+        return jsonify({"redirect_url": flask.url_for("authorize", _external=True)})
     credentials = google.oauth2.credentials.Credentials(**flask.session["credentials"])
-    print("got to here")
 
     calendar = googleapiclient.discovery.build(
         API_SERVICE_NAME, API_VERSION, credentials=credentials
@@ -302,27 +303,19 @@ def export():
 
                 calExport(calendar, event)
 
-    print("SUCCESSFULLY ADDED ALL EVENTS")
-
     return jsonify({"success": "All events added"})
 
 
 @app.route("/authorize")
 def authorize():
-    print("debug1")
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
-        "client_secret.json", scopes=SCOPE
+        CLIENT_SECRETS_FILE, scopes=SCOPE
     )
-    print("debug2")
     flow.redirect_uri = flask.url_for("oauth2callback", _external=True)
-    print("debug3")
-    authorization_url, state = flow.authorization_url(
+    authorization_url = flow.authorization_url(
         access_type="offline", include_granted_scopes="true"
     )
-    print("debug4")
     # flask.session['state'] = state
-    print("debug6")
-    print(authorization_url)
     return flask.redirect(authorization_url)
 
 
@@ -331,27 +324,20 @@ def oauth2callback():
     # Specify the state when creating the flow in the callback so that it can
     # verified in the authorization server response.
     # state = flask.session['state']
-    print("fucks sake")
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
         CLIENT_SECRETS_FILE, scopes=SCOPE
     )
-    print("fucks sake")
     flow.redirect_uri = flask.url_for("oauth2callback", _external=True)
-    print("fucks sake")
 
     # Use the authorization server's response to fetch the OAuth 2.0 tokens.
     authorization_response = flask.request.url
-    print("fucks sake")
     flow.fetch_token(authorization_response=authorization_response)
-    print("fucks sake")
 
     # Store credentials in the session.
     # ACTION ITEM: In a production app, you likely want to save these
     #              credentials in a persistent database instead.
     credentials = flow.credentials
-    print("fucks sake")
     flask.session["credentials"] = credentials_to_dict(credentials)
-    print("fucks sake")
 
     return flask.redirect("export")
 
@@ -378,5 +364,6 @@ def verify():
 
 
 if __name__ == "__main__":
+    app.secret_key = "super secret key"
     app.run(host="0.0.0.0", port=port)
 

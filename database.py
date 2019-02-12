@@ -6,7 +6,6 @@ import psycopg2
 import os
 
 
-
 class Db(object):
     """
     Mini wrapper for database interaction
@@ -21,9 +20,13 @@ class Db(object):
         """ Establishes connection with psql server
         """
         try:
-            #LOCAL VERSION
-            connect_str = "dbname='%s' user='%s' host='%s' password='%s'" % \
-                (dbname, username, host, password)
+            # LOCAL VERSION
+            connect_str = "dbname='%s' user='%s' host='%s' password='%s'" % (
+                dbname,
+                username,
+                host,
+                password,
+            )
             self._conn = psycopg2.connect(connect_str)
             self._cursor = self._conn.cursor()
 

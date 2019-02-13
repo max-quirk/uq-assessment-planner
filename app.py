@@ -16,7 +16,7 @@ import googleapiclient.discovery
 from database import Db
 
 CLIENT_SECRETS_FILE = "client_secret.json"
-SCOPE = "https://www.googleapis.com/auth/calendar"
+SCOPES = "https://www.googleapis.com/auth/calendar"
 API_SERVICE_NAME = "calendar"
 API_VERSION = "v3"
 
@@ -261,8 +261,8 @@ def hello():
 def export():
     if "credentials" not in flask.session:
         return jsonify({"redirect_url": flask.url_for("authorize", _external=True)})
-    credentials = google.oauth2.credentials.Credentials(**flask.session["credentials"])
 
+    credentials = google.oauth2.credentials.Credentials(**flask.session["credentials"])
     calendar = googleapiclient.discovery.build(
         API_SERVICE_NAME, API_VERSION, credentials=credentials
     )
@@ -311,14 +311,14 @@ def export():
 @app.route("/authorize")
 def authorize():
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
-        CLIENT_SECRETS_FILE, scopes=SCOPE
+        CLIENT_SECRETS_FILE, scopes=SCOPES
     )
     flow.redirect_uri = flask.url_for("oauth2callback", _external=True)
-    authorization_url = flow.authorization_url(
+    authorization_url, state = flow.authorization_url(
         access_type="offline", include_granted_scopes="true"
     )
     # flask.session['state'] = state
-    return flask.redirect(authorization_url)
+    return redirect(authorization_url)
 
 
 @app.route("/oauth2callback")
@@ -327,7 +327,7 @@ def oauth2callback():
     # verified in the authorization server response.
     # state = flask.session['state']
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
-        CLIENT_SECRETS_FILE, scopes=SCOPE
+        CLIENT_SECRETS_FILE, scopes=SCOPES
     )
     flow.redirect_uri = flask.url_for("oauth2callback", _external=True)
 

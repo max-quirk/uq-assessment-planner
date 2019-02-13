@@ -43,7 +43,7 @@ def calExport(course, assessment_name, weighting, learning_obj, due_date):
     if not creds or creds.invalid:
         print("no it didnt")
         flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
-            "client_secret.json", scope=SCOPES
+            "client_secret.json", scopes=SCOPES
         )
         authorization_url, state = flow.authorization_url(
             access_type="offline", include_granted_scopes="true"

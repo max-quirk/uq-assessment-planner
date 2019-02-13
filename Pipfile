@@ -9,12 +9,13 @@ black = "*"
 
 [packages]
 google-api-python-client = "*"
-oauth2client = "*"
 dateparser = "*"
 flask = "*"
 pandas = "*"
-google-auth-oauthlib = "*"
 psycopg2 = "*"
+google-auth = "*"
+google-auth-oauthlib = "*"
+google-auth-httplib2 = "*"
 
 [requires]
 python_version = "3.7"

@@ -8,9 +8,9 @@ import flask
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 import pandas as pd
 import dateparser
-from oauth2client import file, client, tools
-import google_auth_oauthlib.flow
+
 import google.oauth2.credentials
+import google_auth_oauthlib.flow
 import googleapiclient.discovery
 
 from database import Db
@@ -264,7 +264,7 @@ def export():
 
     credentials = google.oauth2.credentials.Credentials(**flask.session["credentials"])
     calendar = googleapiclient.discovery.build(
-        API_SERVICE_NAME, API_VERSION, credentials=credentials
+        "calendar", "v3", credentials=credentials
     )
 
     for course_assessments in all_course_assessment:

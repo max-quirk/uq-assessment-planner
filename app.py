@@ -1,17 +1,18 @@
+import os
+import asyncio
+import sys
+import csv
+from datetime import datetime, timedelta
+
+import flask
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 import pandas as pd
-import csv
-
-# from calendar_export import calExport
 import dateparser
-import os
 from oauth2client import file, client, tools
-import sys
-import flask
 import google_auth_oauthlib.flow
 import google.oauth2.credentials
 import googleapiclient.discovery
-from datetime import datetime, timedelta
+
 from database import Db
 
 CLIENT_SECRETS_FILE = "client_secret.json"
@@ -24,7 +25,6 @@ os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
 
 db = Db(detailed=False)
-db.connect("uq_catalogue", "maxquirk", "", "localhost")
 
 app = Flask(__name__)
 app.debug = True
@@ -47,11 +47,8 @@ def formatDate(date):
             if date1.date() == date2.date():
                 date = dates[0]
                 return dateparser.parse(date)
-    print("parsing date...")
     date = dateparser.parse(date)
-    print("parsed")
     return date
-    # return None
 
 
 def getProfileID(course_code):
@@ -303,7 +300,12 @@ def export():
 
                 calExport(calendar, event)
 
-    return jsonify({"success": "All events added"})
+    return jsonify(
+        {
+            "success": True,
+            "message": "Events were successfully added to Google Calendar",
+        }
+    )
 
 
 @app.route("/authorize")
@@ -339,7 +341,7 @@ def oauth2callback():
     credentials = flow.credentials
     flask.session["credentials"] = credentials_to_dict(credentials)
 
-    return flask.redirect("export")
+    return render_template("oauth2_success.html")
 
 
 @app.route("/privacy")
@@ -364,6 +366,7 @@ def verify():
 
 
 if __name__ == "__main__":
+    db.connect("uq_catalogue", "maxquirk", "", "localhost")
     app.secret_key = "super secret key"
     app.run(host="0.0.0.0", port=port)
 

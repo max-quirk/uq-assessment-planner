@@ -16,28 +16,19 @@ class Db(object):
         self._cursor = None
         self._detailed = detailed
 
-    def connect(self, dbname, username, password, host):
+    def connect(self, url):
         """ Establishes connection with psql server
         """
-        # # LOCAL VERSION
-        # connect_str = "dbname='%s' user='%s' host='%s' password='%s'" % (
-        #     dbname,
-        #     username,
-        #     host,
-        #     password,
-        # )
-        # self._conn = psycopg2.connect(connect_str)
-        # self._cursor = self._conn.cursor()
-
-        # HEROKU VERSION
-        DATABASE_URL = os.environ["DATABASE_URL"]
-        self._conn = psycopg2.connect(DATABASE_URL)
+        print("connecting...")
+        self._conn = psycopg2.connect(url)
         self._cursor = self._conn.cursor()
+        print("connected:", self._conn, self._cursor)
 
     def select(self, query):
         """ execution suitable for read queries, returning the rows returned from given query.
         """
         self.log("Exectuting " + query)
+        print(self._cursor)
         self._cursor.execute(query)
         return self._cursor.fetchall()
 
@@ -48,7 +39,7 @@ class Db(object):
         self._cursor.execute(query)
         self._conn.commit()
 
-    def disconnect(self):
+    def close(self):
         """Closes database connection
         """
         self._conn.close()

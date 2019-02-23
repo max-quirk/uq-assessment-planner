@@ -6,6 +6,8 @@ from datetime import datetime, timedelta
 
 import flask
 from flask import Flask, render_template, request, jsonify, redirect, url_for
+from flask.cli import with_appcontext
+
 import pandas as pd
 import dateparser
 
@@ -14,20 +16,32 @@ import google_auth_oauthlib.flow
 import googleapiclient.discovery
 
 from database import Db
+import settings
 
-CLIENT_SECRETS_FILE = "client_secret.json"
-SCOPES = "https://www.googleapis.com/auth/calendar"
-API_SERVICE_NAME = "calendar"
-API_VERSION = "v3"
-
-# DEV ONLY
-os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
-
-
-db = Db(detailed=False)
 
 app = Flask(__name__)
 app.debug = True
+app.secret_key = settings.APP_SECRET
+
+
+def get_db():
+    """
+    Opens a new database connection if there is none yet for the
+    current application context.
+    """
+    if not hasattr(flask.g, "db"):
+        flask.g.db = Db(detailed=False)
+        flask.g.db.connect(settings.DATABASE_URL)
+
+    return flask.g.db
+
+
+@app.teardown_appcontext
+def close_db(error):
+    """Closes the database again at the end of the request."""
+    if hasattr(flask.g, "db"):
+        flask.g.db.close()
+
 
 all_course_assessment = []
 port = int(os.environ.get("PORT", 5000))
@@ -56,7 +70,7 @@ def getProfileID(course_code):
     query = "SELECT course_profile_id FROM course WHERE course_code = '%s'" % (
         course_code.upper()
     )
-    profileID = db.select(query)
+    profileID = get_db().select(query)
     if profileID:
         print("finished getting profile id")
         return profileID[0][0]
@@ -79,7 +93,7 @@ def getAssessments(profileID, course_code):
             """ % (
         course_code.upper()
     )
-    unformatted_assessments = db.select(query)
+    unformatted_assessments = get_db().select(query)
     print("here")
     print(unformatted_assessments)
     print(not unformatted_assessments)
@@ -308,7 +322,7 @@ def export():
 @app.route("/authorize")
 def authorize():
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
-        CLIENT_SECRETS_FILE, scopes=SCOPES
+        settings.CLIENT_SECRETS_FILE, scopes=settings.SCOPES
     )
     flow.redirect_uri = flask.url_for("oauth2callback", _external=True)
     authorization_url, state = flow.authorization_url(
@@ -324,7 +338,7 @@ def oauth2callback():
     # verified in the authorization server response.
     # state = flask.session['state']
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
-        CLIENT_SECRETS_FILE, scopes=SCOPES
+        settings.CLIENT_SECRETS_FILE, scopes=settings.SCOPES
     )
     flow.redirect_uri = flask.url_for("oauth2callback", _external=True)
 
@@ -363,7 +377,5 @@ def verify():
 
 
 if __name__ == "__main__":
-    db.connect("uq_catalogue", "maxquirk", "", "localhost")
-    app.secret_key = "super secret key"
     app.run(host="0.0.0.0", port=port)
 

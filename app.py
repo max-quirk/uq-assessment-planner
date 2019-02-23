@@ -207,8 +207,9 @@ def makeChronologicalHTML(all_course_assessments):
     return ""
 
 
-def calExport(calendar, event):
-    event = calendar.events().insert(calendarId="primary", body=event).execute()
+def calExport(calendar, payload):
+    print(payload)
+    calendar.events().insert(calendarId="primary", body=payload).execute()
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -242,6 +243,7 @@ def hello():
         print(profileID)
         if profileID == 0:
             error_message = '<p style="color: red">Error: One of the courses you entered was invalid. Please try again</p>'
+            all_courses = []
             return render_template("title.html", error_message=error_message)
         assessments = getAssessments(profileID, course_code)
         if assessments:
@@ -287,15 +289,10 @@ def export():
                     "summary": title,
                     "description": description,
                     "start": {
-                        "dateTime": due_date.strftime(
-                            "%Y-%m-%dT%H:%M:%S"
-                        ),  #'2018-12-29T09:00:00-07:00',
+                        "dateTime": due_date.A1(),  #'2018-12-29T09:00:00-07:00',
                         "timeZone": "Australia/Brisbane",
                     },
-                    "end": {
-                        "dateTime": end.strftime("%Y-%m-%dT%H:%M:%S"),
-                        "timeZone": "Australia/Brisbane",
-                    },
+                    "end": {"dateTime": end.A1(), "timeZone": "Australia/Brisbane"},
                 }
 
                 calExport(calendar, event)

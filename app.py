@@ -363,7 +363,7 @@ def verify():
 
 
 if __name__ == "__main__":
-    db.connect("uq_catalogue", "root", "", "localhost")
+    db.connect("uq_catalogue", "maxquirk", "", "localhost")
     app.secret_key = "super secret key"
     app.run(host="0.0.0.0", port=port)
 

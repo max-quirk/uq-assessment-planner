@@ -43,7 +43,6 @@ def close_db(error):
         flask.g.db.close()
 
 
-all_course_assessment = []
 port = int(os.environ.get("PORT", 5000))
 
 
@@ -259,6 +258,7 @@ def hello():
             error_message = '<p style="color: red">Error: One of the courses you entered was invalid. Please try again</p>'
             all_courses = []
             return render_template("title.html", error_message=error_message)
+        all_course_assessment = []
         assessments = getAssessments(profileID, course_code)
         if assessments:
             all_course_assessment.append(assessments)

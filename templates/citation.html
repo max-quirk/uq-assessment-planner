@@ -204,7 +204,9 @@
         requestExport();
       });
 
-      window.state = "{{ state }}";
+    </script>
+    <script type=text/javascript>
+        window.teststate = {{ state|tojson }};
     </script>
   </body>
 </html>

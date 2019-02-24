@@ -124,7 +124,7 @@ def hello():
         "citation.html",
         by_course_as_html=by_course_as_html,
         chronological_html=chronological_html,
-        state={assessments: json.dumps(all_course_assessment)},
+        state={assessments: all_course_assessment},
     )
 
 
@@ -137,6 +137,9 @@ def export():
     calendar = googleapiclient.discovery.build(
         "calendar", "v3", credentials=credentials
     )
+
+    # TODO get this from the request, or OAuth state
+    all_course_assessment = []
 
     for course_assessments in all_course_assessment:
         for assessment in course_assessments:

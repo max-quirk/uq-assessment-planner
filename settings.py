@@ -2,8 +2,8 @@ import os
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 APP_SECRET = os.getenv("APP_SECRET", "secret")
+GOOGLE_OAUTH_CLIENT_ID = os.getenv("GOOGLE_OAUTH_CLIENT_ID")
 
-CLIENT_SECRETS_FILE = "client_secret.json"
 SCOPES = "https://www.googleapis.com/auth/calendar"
 API_SERVICE_NAME = "calendar"
 API_VERSION = "v3"

@@ -125,7 +125,7 @@ def hello():
         "citation.html",
         by_course_as_html=by_course_as_html,
         chronological_html=chronological_html,
-        state={assessments: all_course_assessment},
+        state={"assessments": all_course_assessment},
     )
 
 

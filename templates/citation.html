@@ -174,7 +174,7 @@
         $.ajax({
           url: "/export",
           method: "POST",
-          data: (window.teststate || {}).assessments
+          data: (window.state || {}).assessments
         }).done(function(data) {
           console.log(data);
           if (data.redirect_url) {
@@ -206,7 +206,7 @@
 
     </script>
     <script type=text/javascript>
-        window.teststate = {{ state|tojson }};
+        window.state = {{ state|tojson }};
     </script>
   </body>
 </html>

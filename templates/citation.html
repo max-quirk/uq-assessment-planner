@@ -145,10 +145,14 @@
   <script src="static/correct.js"></script>
 
   <script>
+    let canRequestExport = true;
     const connectOauth = (redirect_url) => {
+      if (!canRequestExport) return
       const oauthWindow = window.open(redirect_url);
       const checkForClose = () => {
         if (!oauthWindow.closed) return setTimeout(checkForClose, 250);
+
+        canRequestExport = false;
         return requestExport();
       };
 
@@ -162,8 +166,10 @@
         data: (window.state || {}).assessments
       }).done(function (data) {
         if (data.redirect_url) {
-          connectOauth(data.redirect_url)
+          return connectOauth(data.redirect_url)
         }
+
+        canRequestExport = true;
 
         if (data.success) {
           $(".ld-ext-right").removeClass("running");

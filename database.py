@@ -3,49 +3,43 @@ Database Utility
 """
 
 import psycopg2
-import os
+from logger import get_logger
+
+_LOG = get_logger("database")
 
 
-class Db(object):
+class Db:
     """
     Mini wrapper for database interaction
     """
 
-    def __init__(self, detailed):
+    def __init__(self):
         self._conn = None
         self._cursor = None
-        self._detailed = detailed
 
     def connect(self, url):
-        """ Establishes connection with psql server
         """
-        print("connecting...")
+        Establishes connection with psql server
+        """
         self._conn = psycopg2.connect(url)
         self._cursor = self._conn.cursor()
-        print("connected:", self._conn, self._cursor)
 
-    def select(self, query):
+    def select(self, query, data=None):
         """ execution suitable for read queries, returning the rows returned from given query.
         """
-        self.log("Exectuting " + query)
-        print(self._cursor)
-        self._cursor.execute(query)
+        _LOG.debug(f"exectuting:{query}")
+        self._cursor.execute(query, data)
         return self._cursor.fetchall()
 
-    def commit(self, query):
+    def commit(self, query, data=None):
         """ execution suitable for update queries
         """
-        self.log("Exectuting " + query)
-        self._cursor.execute(query)
+        _LOG.debug("exectuting:{query}")
+        self._cursor.execute(query, data)
         self._conn.commit()
 
-    def close(self):
+    def disconnect(self):
         """Closes database connection
         """
         self._conn.close()
 
-    def log(self, log):
-        """stdout wrapper
-        """
-        if self._detailed:
-            print(log)

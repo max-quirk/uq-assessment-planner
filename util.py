@@ -5,7 +5,7 @@ _LOG = get_logger("util")
 
 
 def formatDate(date):
-    _LOG.debug('formatting date')
+    _LOG.debug("formatting date")
     # check if date contains no digits
     if not any(char.isdigit() for char in date):
         return None
@@ -23,7 +23,7 @@ def formatDate(date):
 
 
 def splitName(name):  # Separates assessment type from assessment name
-    _LOG.debug('splitting name')
+    _LOG.debug("splitting name")
     for index, letter in enumerate(name):
         try:
             if (
@@ -39,6 +39,7 @@ def splitName(name):  # Separates assessment type from assessment name
 
 
 def makeHTML(all_course_assessments):
+    _LOG.debug("makeHTML")
     html = '<div class="row">'
     columns = len(all_course_assessments)
 
@@ -55,10 +56,12 @@ def makeHTML(all_course_assessments):
             html += '<p class="weighting">' + assessment.get("weighting") + "</p>"
         html += "</div>"
     html += "</div>"
+    _LOG.debug("makeHTML end")
     return html
 
 
 def makeChronologicalHTML(all_course_assessments):
+    _LOG.debug("makeChronologicalHTML")
     formatable_assessments = []
     for course in all_course_assessments:
         for assessment in course:
@@ -83,11 +86,12 @@ def makeChronologicalHTML(all_course_assessments):
         html += "<td>%s</td>" % assessment.get("weighting")
         html += "<td>%s</td>" % assessment.get("learning_obj")
         html += "</tr>"
-
+    _LOG.debug("makeChronologicalHTML end")
     return html
 
 
 def calExport(calendar, payload):
+    _LOG.debug("exporting to calendar")
     calendar.events().insert(calendarId="primary", body=payload).execute()
 
 

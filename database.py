@@ -38,7 +38,7 @@ class Db:
         self._cursor.execute(query, data)
         self._conn.commit()
 
-    def disconnect(self):
+    def close(self):
         """Closes database connection
         """
         self._conn.close()

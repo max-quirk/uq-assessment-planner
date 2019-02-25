@@ -500,6 +500,12 @@ tr {
 	height: 40px;
 }
 
+@media only screen and (max-width: 450px) {
+  tr {
+		padding-bottom: 15px;
+  }
+}
+
 .success-message-div {
 	display: none;
 	font-size: 10px;

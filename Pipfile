@@ -17,6 +17,7 @@ google-auth = "*"
 google-auth-oauthlib = "*"
 google-auth-httplib2 = "*"
 gunicorn = "*"
+oauth2client = "*"
 
 [requires]
 python_version = "3.7"

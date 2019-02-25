@@ -23,7 +23,7 @@ _LOG = get_logger("app")
 app = Flask(__name__)
 app.debug = True
 app.secret_key = settings.APP_SECRET
-PORT = int(os.environ.get("PORT", 5000))
+PORT = int(settings.PORT)
 
 
 def get_db():
@@ -132,18 +132,24 @@ def hello():
 @app.route("/export", methods=["POST"])
 def export():
     if "credentials" not in flask.session:
+        _LOG.debug("credentials not in session. Requesting access to Google...")
         return jsonify({"redirect_url": flask.url_for("authorize", _external=True)})
 
+    _LOG.debug("using credentials")
     credentials = google.oauth2.credentials.Credentials(**flask.session["credentials"])
+    _LOG.debug(f"got credentials: {flask.session['credentials']}")
     calendar = googleapiclient.discovery.build(
-        "calendar", "v3", credentials=credentials
+        settings.GOOGLE_API_CALENDAR_SERVICE,
+        settings.GOOGLE_API_VERSION,
+        credentials=credentials,
     )
+    _LOG.debug(f"got calendar: {calendar}")
 
     if not request.json:
         flask.abort(400)
 
     all_course_assessment = json.dumps(request.json)
-
+    _LOG.debug(f"got state: {all_course_assessment}")
     for course_assessments in all_course_assessment:
         for assessment in course_assessments:
             course = assessment["course_code"].upper()
@@ -181,7 +187,7 @@ def export():
 
 @app.route("/authorize")
 def authorize():
-    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
+    flow = google_auth_oauthlib.flow.Flow.from_client_config(
         json.loads(settings.GOOGLE_OAUTH_CLIENT_ID), scopes=settings.SCOPES
     )
     flow.redirect_uri = flask.url_for("oauth2callback", _external=True)
@@ -193,8 +199,8 @@ def authorize():
 
 @app.route("/oauth2callback")
 def oauth2callback():
-    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
-        settings.GOOGLE_OAUTH_CLIENT_ID, scopes=settings.SCOPES
+    flow = google_auth_oauthlib.flow.Flow.from_client_config(
+        json.loads(settings.GOOGLE_OAUTH_CLIENT_ID), scopes=settings.SCOPES
     )
     flow.redirect_uri = flask.url_for("oauth2callback", _external=True)
 

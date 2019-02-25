@@ -174,7 +174,7 @@
         $.ajax({
           url: "/export",
           method: "POST",
-          data: {}
+          data: (window.teststate || {}).assessments
         }).done(function(data) {
           console.log(data);
           if (data.redirect_url) {

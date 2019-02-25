@@ -65,7 +65,7 @@ def getAssessments(profileID, course_code):
 
     assessments = []
 
-    for i, unformatted_assessment in enumerate(unformatted_assessments):
+    for i, _ in enumerate(unformatted_assessments):
         name = unformatted_assessments[i][0]
         due_date = unformatted_assessments[i][1]
         weighting = unformatted_assessments[i][2]
@@ -128,7 +128,7 @@ def hello():
     )
 
 
-@app.route("/export", methods=["GET", "POST"])
+@app.route("/export", methods=["POST"])
 def export():
     if "credentials" not in flask.session:
         return jsonify({"redirect_url": flask.url_for("authorize", _external=True)})
@@ -138,8 +138,10 @@ def export():
         "calendar", "v3", credentials=credentials
     )
 
-    # TODO get this from the request, or OAuth state
-    all_course_assessment = []
+    if not request.json:
+        flask.abort(400)
+
+    all_course_assessment = json.dumps(request.json)
 
     for course_assessments in all_course_assessment:
         for assessment in course_assessments:
@@ -182,30 +184,22 @@ def authorize():
         settings.CLIENT_SECRETS_FILE, scopes=settings.SCOPES
     )
     flow.redirect_uri = flask.url_for("oauth2callback", _external=True)
-    authorization_url, state = flow.authorization_url(
+    authorization_url, _ = flow.authorization_url(
         access_type="offline", include_granted_scopes="true"
     )
-    # flask.session['state'] = state
     return redirect(authorization_url)
 
 
 @app.route("/oauth2callback")
 def oauth2callback():
-    # Specify the state when creating the flow in the callback so that it can
-    # verified in the authorization server response.
-    # state = flask.session['state']
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
         settings.CLIENT_SECRETS_FILE, scopes=settings.SCOPES
     )
     flow.redirect_uri = flask.url_for("oauth2callback", _external=True)
 
-    # Use the authorization server's response to fetch the OAuth 2.0 tokens.
     authorization_response = flask.request.url
     flow.fetch_token(authorization_response=authorization_response)
 
-    # Store credentials in the session.
-    # ACTION ITEM: In a production app, you likely want to save these
-    #              credentials in a persistent database instead.
     credentials = flow.credentials
     flask.session["credentials"] = util.credentials_to_dict(credentials)
 

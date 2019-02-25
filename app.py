@@ -10,6 +10,7 @@ import dateparser
 import google.oauth2.credentials
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
+import json
 
 from database import Db
 from logger import get_logger
@@ -179,7 +180,7 @@ def export():
 @app.route("/authorize")
 def authorize():
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
-        settings.CLIENT_SECRETS_FILE, scopes=settings.SCOPES
+        json.loads(settings.GOOGLE_OAUTH_CLIENT_ID), scopes=settings.SCOPES
     )
     flow.redirect_uri = flask.url_for("oauth2callback", _external=True)
     authorization_url, state = flow.authorization_url(
@@ -195,7 +196,7 @@ def oauth2callback():
     # verified in the authorization server response.
     # state = flask.session['state']
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
-        settings.CLIENT_SECRETS_FILE, scopes=settings.SCOPES
+        settings.GOOGLE_OAUTH_CLIENT_ID, scopes=settings.SCOPES
     )
     flow.redirect_uri = flask.url_for("oauth2callback", _external=True)
 

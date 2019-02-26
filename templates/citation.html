@@ -145,6 +145,7 @@
   <script src="static/correct.js"></script>
 
   <script>
+    console.log('??')
     let canRequestExport = true;
     const connectOauth = (redirect_url) => {
       if (!canRequestExport) return
@@ -158,18 +159,22 @@
 
       return checkForClose();
     }
-
+    console.log('hello')
+    console.log(window)
+    console.log(window.statusbar)
+    console.log(window.state)
+    console.log((window.state || {}).assessments)
     const requestExport = () => {
       return $.ajax({
         url: "/export",
         method: "POST",
-        data: (window.state || {}).assessments
+        data: JSON.stringify((window.state || {}).assessments),
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
       }).done(function (data) {
         if (data.redirect_url) {
           return connectOauth(data.redirect_url)
         }
-
-        canRequestExport = true;
 
         if (data.success) {
           $(".ld-ext-right").removeClass("running");
@@ -186,6 +191,8 @@
       console.log("exporting");
       $(".ld-ext-right").addClass("running");
       $(".button").addClass("after-gone");
+
+      canRequestExport = true;
       return requestExport();
     });
 

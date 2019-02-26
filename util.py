@@ -96,6 +96,7 @@ def calExport(calendar, payload):
 
 
 def credentials_to_dict(credentials):
+    print("creddys::", credentials)
     return {
         "token": credentials.token,
         "refresh_token": credentials.refresh_token,

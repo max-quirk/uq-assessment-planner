@@ -144,14 +144,14 @@ def export():
         credentials=credentials,
     )
     _LOG.debug(f"got calendar: {calendar}")
-
-    if not request.json:
+    if not request.get_json():
         flask.abort(400)
-
-    all_course_assessment = json.dumps(request.json)
+    all_course_assessment = request.get_json()
     _LOG.debug(f"got state: {all_course_assessment}")
     for course_assessments in all_course_assessment:
+        print(course_assessments)
         for assessment in course_assessments:
+            print(assessment)
             course = assessment["course_code"].upper()
             assessment_name = assessment["name"]
             weighting = assessment["weighting"]
@@ -169,10 +169,13 @@ def export():
                     "summary": title,
                     "description": description,
                     "start": {
-                        "dateTime": due_date.A1(),  #'2018-12-29T09:00:00-07:00',
+                        "dateTime": due_date.isoformat(),  #'2018-12-29T09:00:00-07:00',
                         "timeZone": "Australia/Brisbane",
                     },
-                    "end": {"dateTime": end.A1(), "timeZone": "Australia/Brisbane"},
+                    "end": {
+                        "dateTime": end.isoformat(),
+                        "timeZone": "Australia/Brisbane",
+                    },
                 }
 
                 util.calExport(calendar, event)
